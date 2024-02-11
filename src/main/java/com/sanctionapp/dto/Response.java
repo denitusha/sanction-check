@@ -2,10 +2,16 @@ package com.sanctionapp.dto;
 
 import lombok.Data;
 
-import java.util.List;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-public class Respone {
+public class Response {
 
-    private List<Match> matches;
+    private Set<Match> matches = new HashSet<>();
+
+    public void addMatch(Match match) {
+        matches.add(match);
+    }
 }

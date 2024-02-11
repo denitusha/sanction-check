@@ -1,2 +1,7 @@
-package com.sanctionapp.entity;public enum Status {
+package com.sanctionapp.entity;
+
+public enum Status {
+
+    Sanctioned,
+    Clear
 }

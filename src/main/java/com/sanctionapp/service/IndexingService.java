@@ -1,2 +1,5 @@
-package com.sanctionapp.service;public interface IndexingService {
+package com.sanctionapp.service;
+
+public interface IndexingService {
+    void indexExistingData();
 }

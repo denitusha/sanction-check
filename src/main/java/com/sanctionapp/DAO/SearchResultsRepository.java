@@ -1,6 +1,12 @@
 package com.sanctionapp.DAO;
 
+import com.sanctionapp.entity.Person;
+import com.sanctionapp.entity.SearchResult;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SearchResults extends JpaRepository<SearchResults, Long> {
+import java.util.List;
+
+public interface SearchResultsRepository extends JpaRepository<SearchResult, Long> {
+
+    List<SearchResult> findAllBySearchId(Long id);
 }

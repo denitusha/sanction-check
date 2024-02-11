@@ -1,6 +1,9 @@
 package com.sanctionapp.dto;
 
-public class Response {
+import lombok.Data;
+
+@Data
+public class Match {
     private String name;
 
     private String score;
