@@ -10,7 +10,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordFie
 
 @Entity(name = "Person")
 @Data
-@Indexed
 public class Person {
 
     @Id
@@ -19,23 +18,18 @@ public class Person {
     private Long id;
 
     @Column(name="full_name")
-    @FullTextField
     private String fullName;
 
     @Column(name="first_name")
-    @FullTextField
     private String firstName;
 
     @Column(name="last_name")
-    @FullTextField
     private String lastName;
 
     @Column(name = "gender")
-    @KeywordField
     private String gender;
 
     @Column(name = "country")
-    @KeywordField
     private String country;
 
 }
