@@ -3,10 +3,7 @@ package com.sanctionapp.dto;
 import lombok.Data;
 
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class Response {
@@ -16,4 +13,16 @@ public class Response {
     public void addMatch(Match match) {
         matches.add(match);
     }
+
+    public void addAllMatches(PriorityQueue<Match> topMatches) {
+        List<Match> tempMatches = new ArrayList<>();
+        while (!topMatches.isEmpty()) {
+            tempMatches.add(0, topMatches.poll()); // Add at the beginning to reverse order
+        }
+        matches.addAll(tempMatches);
+    }
+
+
+
+
 }
