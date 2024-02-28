@@ -4,26 +4,25 @@ import com.sanctionapp.DAO.PersonRepository;
 import com.sanctionapp.dto.Match;
 import com.sanctionapp.dto.Response;
 import com.sanctionapp.entity.Person;
+import com.sanctionapp.utils.OurCustomComparator;
 import lombok.RequiredArgsConstructor;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+
 import java.util.List;
 import java.util.PriorityQueue;
 
 @Service
 @RequiredArgsConstructor
-public class FuzzyWuzzy {
+public class SanctionService {
 
     private final PersonRepository personRepository;
     private final Environment env;
 
-    OurCustomComparator customComparator = new OurCustomComparator();
+    private final OurCustomComparator customComparator;
 
 
     public Response searchForSanctions(String fullName) {
@@ -53,8 +52,7 @@ public class FuzzyWuzzy {
                 // If the size of the priority queue exceeds the desired number of matches,
                 // remove the lowest-scoring match
                 if (topMatches.size() >= maxMatches) {
-                    Match lowestMatch = topMatches.peek(); // Get the lowest-scoring match without removing it
-                    if (match.getScore() > lowestMatch.getScore()) {
+                    if (match.getScore() > topMatches.peek().getScore()) {
                         topMatches.poll(); // Remove the lowest-scoring match
                         topMatches.offer(match); // Add the new match
                     }
@@ -75,16 +73,3 @@ public class FuzzyWuzzy {
     }
 }
 
-class OurCustomComparator implements Comparator<Match>{
-    public int compare(Match m1, Match m2){
-        //   We are returning the object in descending order of their age.
-        if (m1.getScore() > m2.getScore()) {
-            return 1; // Return -1 for descending order
-        } else if (m1.getScore() < m2.getScore()) {
-            return -1; // Return 1 for descending order
-        } else {
-            return 0; // Return 0 for equal scores
-        }
-
-    }
-}
