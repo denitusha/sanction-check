@@ -22,7 +22,6 @@ import java.util.concurrent.*;
 @RequiredArgsConstructor
 public class SanctionService {
 
-    private final PersonRepository personRepository;
     private  final PersonCache personCache;
     private final Environment env;
 
@@ -34,7 +33,6 @@ public class SanctionService {
 
 
         int maxMatches = env.getProperty("max-matches", Integer.class, 3);
-        int threshold = env.getProperty("threshold", Integer.class, 85);
 
         Response response = new Response();
 
@@ -42,7 +40,7 @@ public class SanctionService {
 
         List<Future<List<Match>>> futures = new ArrayList<>();
 
-        int numThreads = 4;
+        int numThreads = 2;
         Long batchSize = personCache.size() / numThreads;
         Long remaining = personCache.size() % numThreads;
 
