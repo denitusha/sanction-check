@@ -1,6 +1,7 @@
 package com.sanctionapp.service;
 
 import com.sanctionapp.DAO.PersonRepository;
+import com.sanctionapp.cache.PersonCache;
 import com.sanctionapp.dto.Match;
 import com.sanctionapp.dto.Response;
 import com.sanctionapp.entity.Person;
@@ -20,6 +21,7 @@ import java.util.PriorityQueue;
 public class SanctionService {
 
     private final PersonRepository personRepository;
+    private  final PersonCache personCache;
     private final Environment env;
 
     private final OurCustomComparator customComparator;
@@ -34,7 +36,7 @@ public class SanctionService {
         Response response = new Response();
 
         PriorityQueue<Match> topMatches = new PriorityQueue<>(maxMatches, customComparator);
-        List<Person> personList = personRepository.findAll();
+        List<Person> personList = personCache.getAllPersons();
         // Define the threshold for accepting a match
 
         // Iterate over each person
