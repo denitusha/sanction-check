@@ -13,8 +13,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.concurrent.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,50 +29,89 @@ public class SanctionService {
     private final OurCustomComparator customComparator;
 
 
+
     public Response searchForSanctions(String fullName) {
+
 
         int maxMatches = env.getProperty("max-matches", Integer.class, 3);
         int threshold = env.getProperty("threshold", Integer.class, 85);
 
-
         Response response = new Response();
 
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        List<Future<List<Match>>> futures = new ArrayList<>();
+
+        int numThreads = 4;
+        Long batchSize = personCache.size() / numThreads;
+        Long remaining = personCache.size() % numThreads;
+
+        for (int i = 0; i < numThreads; i++) {
+            Long start = i * batchSize;
+            Long end = start + batchSize;
+            if (i == numThreads - 1) {
+                end += remaining;
+            }
+
+            futures.add(executorService.submit(new SearchTask(start, end, fullName)));
+        }
+
         PriorityQueue<Match> topMatches = new PriorityQueue<>(maxMatches, customComparator);
-        List<Person> personList = personCache.getAllPersons();
-        // Define the threshold for accepting a match
-
-        // Iterate over each person
-        for (Person person : personList) {
-            // Calculate the fuzzy score
-            int setRatio = FuzzySearch.tokenSetRatio(fullName, person.getFullName());
-
-            // If the score is above the threshold, add it to the priority queue
-            if (setRatio > threshold) {
-                Match match = new Match();
-                match.setId(person.getId());
-                match.setName(person.getFullName());
-                match.setScore(setRatio);
-
-                // If the size of the priority queue exceeds the desired number of matches,
-                // remove the lowest-scoring match
-                if (topMatches.size() >= maxMatches) {
-                    if (match.getScore() > topMatches.peek().getScore()) {
-                        topMatches.poll(); // Remove the lowest-scoring match
-                        topMatches.offer(match); // Add the new match
+        for (Future<List<Match>> future : futures) {
+            try {
+                List<Match> matches = future.get();
+                for (Match match : matches) {
+                    System.out.println(match);
+                    if (topMatches.size() < maxMatches || match.getScore() > topMatches.peek().getScore()) {
+                        if (topMatches.size() >= maxMatches) {
+                            topMatches.poll();
+                        }
+                        topMatches.offer(match);
                     }
-                } else {
-                    topMatches.offer(match); // Add the match to topMatches if there's space
                 }
-
-
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
             }
         }
 
-        System.out.println(topMatches);
-        // Add the top matches from the priority queue to the response
-        response.addAllMatches(topMatches);
+        executorService.shutdown();
 
+        response.addAllMatches(topMatches);
         return response;
+
+    }
+
+    private class SearchTask implements Callable<List<Match>> {
+
+        int threshold = env.getProperty("threshold", Integer.class, 85);
+        private final Long start;
+        private final Long end;
+        private final String fullName;
+
+        public SearchTask(Long start, Long end, String fullName) {
+            this.start = start;
+            this.end = end;
+            this.fullName = fullName;
+        }
+
+        @Override
+        public List<Match> call() {
+            List<Match> matches = new ArrayList<>();
+            for (Long i = start; i < end; i++) {
+                Person person = personCache.get(i);
+                if (person != null) {
+                    int setRatio = FuzzySearch.tokenSetRatio(fullName, person.getFullName());
+                    if (setRatio >= threshold) {
+                        Match match = new Match();
+                        match.setId(person.getId());
+                        match.setName(person.getFullName());
+                        match.setScore(setRatio);
+                        matches.add(match);
+                    }
+                }
+            }
+            return matches;
+        }
 
     }
 }
