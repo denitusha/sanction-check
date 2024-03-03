@@ -36,6 +36,7 @@ public class CacheUpdate {
 
     @Scheduled(cron = "${cache.update.time.cron}")
     public Long updateCache() {
+        personCache.clear();
         List<Person> personList = personRepository.findAll();
 
         System.out.println(personList.get(0));
