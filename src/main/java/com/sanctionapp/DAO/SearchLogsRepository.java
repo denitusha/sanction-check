@@ -8,7 +8,4 @@ import java.util.Optional;
 
 public interface SearchLogsRepository extends JpaRepository<SearchLogs, Long> {
 
-
-
-    Optional<SearchLogs> findFirstBySearchedNameOrderBySearchedNameDesc(String fullName);
 }

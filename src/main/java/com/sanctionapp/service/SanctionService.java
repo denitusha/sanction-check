@@ -28,6 +28,8 @@ public class SanctionService {
     private final OurCustomComparator customComparator;
 
 
+    private final SearchHistoryService searchHistoryService;
+
 
     public Response searchForSanctions(String fullName) {
 
@@ -36,7 +38,7 @@ public class SanctionService {
 
         Response response = new Response();
 
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+         ExecutorService executorService = Executors.newFixedThreadPool(2);
 
         List<Future<List<Match>>> futures = new ArrayList<>();
 
@@ -59,7 +61,7 @@ public class SanctionService {
             try {
                 List<Match> matches = future.get();
                 for (Match match : matches) {
-                    System.out.println(match);
+                   // System.out.println(match);
                     if (topMatches.size() < maxMatches || match.getScore() > topMatches.peek().getScore()) {
                         if (topMatches.size() >= maxMatches) {
                             topMatches.poll();
@@ -73,7 +75,7 @@ public class SanctionService {
         }
 
         executorService.shutdown();
-
+        searchHistoryService.saveSearch(fullName, topMatches);
         response.addAllMatches(topMatches);
         return response;
 
@@ -100,10 +102,11 @@ public class SanctionService {
                 if (person != null) {
                     int setRatio = FuzzySearch.tokenSetRatio(fullName, person.getFullName());
                     if (setRatio >= threshold) {
-                        Match match = new Match();
-                        match.setId(person.getId());
-                        match.setName(person.getFullName());
-                        match.setScore(setRatio);
+                        Match match = Match.builder()
+                                .id(person.getId())
+                                .name(person.getFullName())
+                                .score(setRatio)
+                                .build();
                         matches.add(match);
                     }
                 }

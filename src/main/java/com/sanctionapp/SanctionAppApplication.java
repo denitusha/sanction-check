@@ -29,15 +29,15 @@ public class SanctionAppApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 
-		List<Person> personList = personRepository.findAll();
-
-		for(Person person: personList){
-
-			personCache.put(person);
-		}
-
-		System.out.println("Cache is ready");
-		System.out.println(personCache.get(16L));
+//		List<Person> personList = personRepository.findAll();
+//
+//		for(Person person: personList){
+//
+//			personCache.put(person);
+//		}
+//
+//		System.out.println("Cache is ready");
+//		System.out.println(personCache.get(16L));
 
 		Runtime runtime = Runtime.getRuntime();
 

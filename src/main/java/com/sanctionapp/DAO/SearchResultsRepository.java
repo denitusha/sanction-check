@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface SearchResultsRepository extends JpaRepository<SearchResult, Long> {
 
-    List<SearchResult> findAllBySearchId(Long id);
+
 }

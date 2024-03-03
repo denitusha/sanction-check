@@ -1,6 +1,7 @@
 package com.sanctionapp.entity;
 
 
+import com.sanctionapp.dto.Match;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,10 +17,10 @@ public class SearchResult {
     private Long id;
 
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-    CascadeType.DETACH, CascadeType.MERGE})
-    @JoinColumn(name = "person_id")
-    private Person match;
+
+    private String fullName;
+
+    private Integer score;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.MERGE})
