@@ -40,12 +40,10 @@ public class CacheServiceTest {
 
     @Test
     void testUpdateCacheEmpty() {
-        // Mocking the behavior of PersonRepository.findAll()
         List<Person> mockPersonList;
         mockPersonList = Collections.emptyList();
         when(personRepository.findAll()).thenReturn(mockPersonList);
 
-        // Calling the method to be tested
         cacheUpdate.updateCache();
 
 
@@ -73,7 +71,6 @@ public class CacheServiceTest {
                 .country("Canada")
                 .build();
 
-        // Mocking the behavior of PersonRepository.findAll()
         List<Person> personList = Arrays.asList(johnDoe, janeSmith);
         when(personRepository.findAll()).thenReturn(personList);
 

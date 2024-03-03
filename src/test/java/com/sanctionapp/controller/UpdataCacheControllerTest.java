@@ -37,10 +37,8 @@ public class UpdataCacheControllerTest {
     public void testUpdateCache() throws Exception {
         MockitoAnnotations.openMocks(this);
 
-        // Mock the behavior of CacheUpdate
         when(cacheUpdate.updateCache()).thenReturn(5L);
 
-        // Perform GET request to /api/update-cache
         mockMvc.perform(MockMvcRequestBuilders.get("/api/update-cache"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("5")); // Check response body

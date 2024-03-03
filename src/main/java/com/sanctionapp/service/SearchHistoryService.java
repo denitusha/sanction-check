@@ -25,16 +25,15 @@ public class SearchHistoryService {
 
     @Async
     protected void saveSearch(String fullName, PriorityQueue<Match> matches) {
-        // Update the search logs asynchronously
         SearchLogs searchLog = new SearchLogs();
         searchLog.setSearchedName(fullName);
 
 
         if (matches.isEmpty()) {
-            searchLog.setStatus(Status.Clear); // Assuming you have a Status enum
+            searchLog.setStatus(Status.Clear);
             searchLogsRepository.save(searchLog);
         } else {
-            searchLog.setStatus(Status.Sanctioned); // Assuming you have a Status enum
+            searchLog.setStatus(Status.Sanctioned);
             for (Match match : matches) {
 
 

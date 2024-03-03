@@ -18,8 +18,6 @@ import java.util.List;
 public class SanctionAppApplication implements CommandLineRunner {
 
 
-	private final PersonCache personCache;
-	private final PersonRepository personRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SanctionAppApplication.class, args);
@@ -29,19 +27,10 @@ public class SanctionAppApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 
-//		List<Person> personList = personRepository.findAll();
-//
-//		for(Person person: personList){
-//
-//			personCache.put(person);
-//		}
-//
-//		System.out.println("Cache is ready");
-//		System.out.println(personCache.get(16L));
+
 
 		Runtime runtime = Runtime.getRuntime();
 
-		// Get the number of available processors
 		int availableProcessors = runtime.availableProcessors();
 
 		// Print the number of available processors

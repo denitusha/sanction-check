@@ -18,7 +18,6 @@ public class Match implements Comparable<Match>{
 
     @Override
     public int compareTo(Match other) {
-        // Compare matches based on their scores
         return Integer.compare(this.score, other.score);
     }
 }

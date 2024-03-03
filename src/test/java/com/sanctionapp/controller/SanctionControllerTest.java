@@ -53,13 +53,10 @@ public class SanctionControllerTest {
 
     @Test
     public void testPlaceOrderResponseEmpty() throws Exception {
-        // Prepare test data
         Request request = new Request("John Doe");
 
-        // Prepare mock response
         Response mockResponse = new Response();
 
-        // Mock the behavior of SanctionService
         given(sanctionService.searchForSanctions(request.getFullName())).willReturn(mockResponse);
 
         ResultActions response = mockMvc.perform(post("/api/sanctions")
@@ -74,10 +71,8 @@ public class SanctionControllerTest {
 
     @Test
     public void testPlaceOrder() throws Exception {
-        // Prepare test data
         Request request = new Request("John Doe");
 
-        // Prepare mock response
         Response mockResponse = new Response();
 
         PriorityQueue<Match> matches = new PriorityQueue<>();
@@ -94,15 +89,14 @@ public class SanctionControllerTest {
                 .build());
         mockResponse.addAllMatches(matches);
 
-        // Mock the behavior of SanctionService
         given(sanctionService.searchForSanctions(request.getFullName())).willReturn(mockResponse);
 
         ResultActions response = mockMvc.perform(post("/api/sanctions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request.getFullName()))) ;// Set the request body
+                .content(objectMapper.writeValueAsString(request.getFullName()))) ;
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.matches", hasSize(2))); // C Che
+                .andExpect(MockMvcResultMatchers.jsonPath("$.matches", hasSize(2)));
 
     }
 

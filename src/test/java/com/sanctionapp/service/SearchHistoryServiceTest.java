@@ -45,7 +45,7 @@ public class SearchHistoryServiceTest {
     void testSaveSearch_NonEmptyMatches() {
         String fullName = "John Doe";
         PriorityQueue<Match> matches = new PriorityQueue<>();
-        matches.add(new Match(1L, "John Doe", 87)); // Example match
+        matches.add(new Match(1L, "John Doe", 87));
 
         searchHistoryService.saveSearch(fullName, matches);
 
