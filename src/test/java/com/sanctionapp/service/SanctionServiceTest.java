@@ -1,8 +1,6 @@
 package com.sanctionapp.service;
 
-import com.sanctionapp.DAO.PersonRepository;
 import com.sanctionapp.cache.PersonCache;
-import com.sanctionapp.dto.Match;
 import com.sanctionapp.dto.Response;
 import com.sanctionapp.entity.Person;
 import com.sanctionapp.utils.OurCustomComparator;
@@ -10,20 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.env.Environment;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.*;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
